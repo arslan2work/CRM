@@ -33,9 +33,11 @@
                         <tbody>
                             {% for agent in object_list %}
                                 <tr class="bg-white">
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                        {{ agent.user.first_name }} {{ agent.user.last_name }}
-                                    </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                            <a href={% url 'agents:agent-detail' agent.pk %}>
+                                                {{ agent.user.first_name }} {{ agent.user.last_name }}
+                                            </a>
+                                        </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         {{ agent.user.email }}
                                     </td>
