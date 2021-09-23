@@ -42,9 +42,9 @@
                                         {{ agent.user.email }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        {% comment %} <a href="{% url 'agents:agent-update' agent.pk %}" class="text-indigo-600 hover:text-indigo-900">
+                                        <a href="{% url 'agents:agent-update' agent.pk %}" class="text-indigo-600 hover:text-indigo-900">
                                             Edit
-                                        </a> {% endcomment %}
+                                        </a>
                                     </td>
                                 </tr>
                             {% empty %}

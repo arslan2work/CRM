@@ -97,16 +97,10 @@ class LeadCreateView(OrganisorAndLoginRequiredMixin, generic.CreateView):
     def get_success_url(self):
         return reverse("leads:lead-list")
 
-    # def from_valid(self, form):
-    #     send_mail(
-    #         subject="A lead has been created",
-    #         message="Got to the site to see new lead.",
-    #         from_email="test@test.com",
-    #         recepient_list=["test2@test.com"]
-    #     )
-    #     return super(LeadCreateView, self).form_valid(form)
-
     def form_valid(self, form):
+        lead = form.save(commit=False)
+        lead.organisation = self.request.user.userprofile
+        lead.save()
         send_mail(
             subject="A lead has been created",
             message="Go to the site to see the new lead",
@@ -133,7 +127,15 @@ class LeadUpdateView(OrganisorAndLoginRequiredMixin, generic.UpdateView):
 
     def get_queryset(self):
         user = self.request.user
-        return  Lead.objects.filter(organisation=user.userprofile)
+        # initial queryset of leads for the entire organisation
+        return Lead.objects.filter(organisation=user.userprofile)
+
+    def get_success_url(self):
+        return reverse("leads:lead-list")
+
+    def form_valid(self, form):
+        form.save()
+        return super(LeadUpdateView, self).form_valid(form)
         
 
 
