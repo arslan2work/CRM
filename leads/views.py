@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.views import generic
 from .models import Lead, Agent, Category
-from .forms import LeadForm, LeadModelForm, CustomUserCreationForm, AssignAgentForm, LeadCategoryUpdateForm
+from .forms import LeadForm, LeadModelForm, CustomUserCreationForm, AssignAgentForm, LeadCategoryUpdateForm, CategoryModelForm
 from agents.mixins import OrganisorAndLoginRequiredMixin
 
 class SignupView(generic.CreateView):
@@ -271,6 +271,21 @@ class LeadCategoryUpdateView(LoginRequiredMixin, generic.UpdateView):
                 instance.converted_date = datetime.datetime.now()
         instance.save()
         return super(LeadCategoryUpdateView, self).form_valid(form)
+
+class CategoryCreateView(OrganisorAndLoginRequiredMixin, generic.CreateView):
+    template_name = "leads/category_create.html"
+    form_class = CategoryModelForm
+
+    def get_success_url(self):
+        return reverse("leads:category-list")
+
+    def form_valid(self, form):
+        category = form.save(commit=False)
+        category.organisation = self.request.user.userprofile
+        category.save()
+        return super(CategoryCreateView, self).form_valid(form)
+
+
 # def lead_update(request, pk):
 #     lead = Lead.objects.get(id=pk)
 #     form = LeadForm()
